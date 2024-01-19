@@ -11,6 +11,11 @@ public class OrderRequest {
     private Long userId;
     private List<OrderProductRequest> products;
 
+    public OrderRequest(Long userId, List<OrderProductRequest> products) {
+        this.userId = userId;
+        this.products = products;
+    }
+
     public Order toOrder() {
         return Order.builder()
                 .userId(userId)

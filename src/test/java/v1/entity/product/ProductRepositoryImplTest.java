@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import v1.domain.product.Product;
-import v1.domain.product.ProductReader;
+import v1.domain.product.ProductManager;
 import v1.entity.product.repository.ProductEntityRepository;
 import v1.entity.product.repository.ProductRepository;
 
@@ -23,7 +23,7 @@ class ProductRepositoryImplTest {
     @Autowired
     private ProductEntityRepository productEntityRepository;
     @Autowired
-    private ProductReader productReader;
+    private ProductManager productManager;
 
     @AfterEach
     void tearDown() {
@@ -83,7 +83,7 @@ class ProductRepositoryImplTest {
         productEntityRepository.save(productEntity);
 
         //when
-        Product product = productReader.read(productEntity.getId());
+        Product product = productManager.findByProductId(productEntity.getId());
 
         //then
         assertThat(product.getName()).isEqualTo("샴푸");

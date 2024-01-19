@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import v1.domain.orderproduct.OrderProduct;
-import v1.entity.orderproduct.repository.OrderProductEntityRepository;
-import v1.entity.orderproduct.repository.OrderProductRepository;
+import v1.domain.order.OrderProduct;
+import v1.entity.order.repository.OrderProductEntityRepository;
+import v1.entity.order.repository.OrderProductRepository;
 
 @SpringBootTest
 @ActiveProfiles("dev")

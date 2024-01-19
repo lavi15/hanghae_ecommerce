@@ -1,14 +1,18 @@
 package v1.controller.order;
 
 import java.util.List;
-import lombok.Builder;
 import lombok.Getter;
+import v1.domain.order.Order;
 
 @Getter
-@Builder
 public class OrderResponse {
     private Long orderId;
     private Long userId;
-    private List<OrderProductRequest> products;
+    private List<OrderProductResponce> products;
 
+    public OrderResponse(Order order) {
+        this.orderId = order.getOrderId();
+        this.userId = order.getUserId();
+        this.products = order.getOrderProducts().stream().map(orderProduct -> new OrderProductResponce(orderProduct)).toList();
+    }
 }

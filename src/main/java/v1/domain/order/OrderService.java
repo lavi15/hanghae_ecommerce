@@ -1,6 +1,7 @@
 package v1.domain.order;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import v1.commons.advice.LockHandler;
@@ -12,6 +13,7 @@ import v1.entity.order.repository.OrderRepository;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
     private final OrderRepository orderRepository;
     private final LockHandler lockHandler;
@@ -20,23 +22,25 @@ public class OrderService {
     private final RedisKeyFactory redisKeyFactory;
     private final TransactionHandler transactionHandler;
 
-    public void createOrder(Order order) {
+    public Order createOrder(Order order) {
         order.getOrderProducts().forEach(orderProduct -> productManager.validate(orderProduct.getProductId()));
         productManager.deductProduct(order.getOrderProducts());
 
         try{
-            lockHandler.runOnLock(
+            return lockHandler.runOnLock(
                 redisKeyFactory.createUserKey(order.getUserId()),
                 2000L,
                 1000L,
                 () -> transactionHandler.runOnWriteTransaction(() -> {
-                    orderRepository.save(order);
+                    Order complateOrder = orderRepository.save(order);
                     applicationEventPublisher.publishEvent(new OrderCreatedEvent(order));
-                    return null;
+                    return complateOrder;
                 })
             );
         }catch (Exception e) {
+            log.error("Failed Create Order");
             productManager.addProduct(order.getOrderProducts());
+            throw new RuntimeException("Failed Create Order");
         }
     }
 }

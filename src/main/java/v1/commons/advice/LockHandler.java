@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class LockHandler {
     private final RedissonClient redissonClient;
 
@@ -29,7 +31,11 @@ public class LockHandler {
             }
             return execute.get();
         } finally {
-            locks.forEach(RLock::unlock);
+            try{
+                locks.forEach(RLock::unlock);
+            }catch (IllegalMonitorStateException e){
+                throw new IllegalMonitorStateException("Unlock Failed");
+            }
         }
     }
 
@@ -38,13 +44,19 @@ public class LockHandler {
         try {
             boolean available = lock.tryLock(waitTimeMs, leaseTimeMs, TimeUnit.MILLISECONDS);
             if (!available) {
-                throw new RuntimeException("Lock Fail");
+                log.error("Lock Failed");
+                throw new RuntimeException("Lock Failed");
             }
             return execute.get();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
-            lock.unlock();
+            try {
+                lock.unlock();
+            }catch (IllegalMonitorStateException e) {
+                log.error("Unlock Failed");
+                throw new IllegalMonitorStateException("Unlock Failed");
+            }
         }
     }
 }

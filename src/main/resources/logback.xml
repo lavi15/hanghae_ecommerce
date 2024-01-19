@@ -1,27 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <springProperty name="AWS_ACCESS_KEY" source="cloud.aws.credentials.accessKey"/>
-    <springProperty name="AWS_SECRET_KEY" source="cloud.aws.credentials.secretKey"/>
-    <appender name="aws_cloud_watch_log" class="ca.pjer.logback.AwsLogsAppender">
+    <appender name="ASYNC_AWS_LOGS" class="ca.pjer.logback.AwsLogsAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
         </filter>
         <layout>
-            <pattern>[%thread] [%date] [%level] [%file:%line] - %msg%n</pattern>
-        </layout>        <logGroupName>aws-error-log-test/error-log</logGroupName>
-        <logStreamUuidPrefix>error-log-</logStreamUuidPrefix>
+            <pattern>%d{yyyyMMdd'T'HHmmss} %thread %level %logger{15} %msg%n</pattern>
+        </layout>
+        <if condition='property("spring.profiles.active").contains("prod")'>
+            <then>
+                <!-- prod 용 로그 그룹명 -->
+                <logGroupName>EcommerceAPI</logGroupName>
+            </then>
+        </if>
+        <if condition='property("spring.profiles.active").contains("dev")'>
+            <then>
+                <!-- dev 용 로그 그룹명 -->
+                <logGroupName>EcommerceAPI</logGroupName>
+            </then>
+        </if>
+        <logStreamUuidPrefix>error-</logStreamUuidPrefix>
         <logRegion>ap-northeast-2</logRegion>
         <maxBatchLogEvents>50</maxBatchLogEvents>
         <maxFlushTimeMillis>30000</maxFlushTimeMillis>
         <maxBlockTimeMillis>5000</maxBlockTimeMillis>
         <retentionTimeDays>0</retentionTimeDays>
-        <accessKeyId>${AWS_ACCESS_KEY}</accessKeyId>
-        <secretAccessKey>${AWS_SECRET_KEY}</secretAccessKey>
-        <encoder>
-            <charset>UTF-8</charset>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] [%5level] %logger{35}[%method:%line] %m%n</pattern>
-        </encoder>
     </appender>
-    <logger name="errorLogger" level="error" additivity="false">
-        <appender-ref ref="aws_cloud_watch_log"/>
-    </logger>
+
+    <springProfile name="dev">
+        <logger name="org.springframework" level="INFO" />
+        <logger name="inc.bfactory.kpop" level="INFO"/>
+        <root level="INFO">
+            <appender-ref ref="ASYNC_AWS_LOGS" />
+        </root>
+    </springProfile>
+
 </configuration>

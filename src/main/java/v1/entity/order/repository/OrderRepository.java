@@ -5,5 +5,5 @@ import v1.domain.order.Order;
 public interface OrderRepository {
     Order save(Order order);
 
-    void completePayment(Order order);
+    void markPaymentCompleted(Long orderId);
 }

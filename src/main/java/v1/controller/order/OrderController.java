@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import v1.controller.ApiResponse;
+import v1.domain.order.Order;
 import v1.domain.order.OrderService;
 
 @RestController
@@ -16,9 +17,9 @@ import v1.domain.order.OrderService;
 public class OrderController {
     private final OrderService orderService;
 
-    @PostMapping("/request")
+    @PostMapping("/create")
     public ApiResponse<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) {
-        orderService.createOrder(orderRequest.toOrder());
-        return ApiResponse.ok(OrderResponse.builder().build());
+        Order order = orderService.createOrder(orderRequest.toOrder());
+        return ApiResponse.ok(new OrderResponse(order));
     }
 }

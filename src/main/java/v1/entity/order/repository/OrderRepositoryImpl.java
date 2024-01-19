@@ -24,7 +24,11 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public void completePayment(Order order) {
-        OrderEntity orderEntity = orderEntityRepository.findById(order.getOrderId()).get();
+    public void markPaymentCompleted(Long orderId) {
+        OrderEntity orderEntity = orderEntityRepository.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("확인할 수 없는 주문입니다."));
+        orderEntity.markPaymentCompleted();
+        orderEntityRepository.save(orderEntity);
     }
+
 }

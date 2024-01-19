@@ -41,7 +41,7 @@ class ProductControllerTest extends ControllerTestSupport {
         when(productService.getProducts()).thenReturn(products);
 
         //when//then
-        mockMvc.perform(get("/v1/product/request"))
+        mockMvc.perform(get("/v1/products/request"))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.code").value("200"))
@@ -79,7 +79,7 @@ class ProductControllerTest extends ControllerTestSupport {
         when(productService.getPopularProductsInThreeDays()).thenReturn(products);
 
         //when//then
-        mockMvc.perform(get("/v1/product/popular"))
+        mockMvc.perform(get("/v1/products/popular"))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.code").value("200"))

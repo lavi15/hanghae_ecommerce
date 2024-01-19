@@ -52,4 +52,8 @@ public class OrderEntity extends BaseEntity {
             .orderProductEntities(orderProductEntities)
             .build();
     }
+
+    public void markPaymentCompleted(){
+        this.orderState = OrderState.PAYMENT_COMPLETED;
+    }
 }

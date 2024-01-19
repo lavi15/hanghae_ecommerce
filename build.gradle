@@ -65,6 +65,9 @@ dependencies {
 
     // logback
     implementation 'ca.pjer:logback-awslogs-appender:1.6.0'
+
+    //janino
+    implementation 'org.codehaus.janino:janino:3.1.7'
 }
 
 tasks.named('test') {

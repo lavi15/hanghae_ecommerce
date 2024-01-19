@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import v1.entity.orderproduct.OrderProductEntity;
-import v1.entity.orderproduct.repository.OrderProductEntityRepository;
+import v1.entity.order.OrderProductEntity;
+import v1.entity.order.repository.OrderProductEntityRepository;
 import v1.entity.product.ProductEntity;
 import v1.entity.product.repository.ProductEntityRepository;
 
@@ -62,6 +62,7 @@ class ProductServiceTest {
 
         //then
         assertThat(products.size()).isEqualTo(3);
+        assertThat(products).extracting("name").containsExactly("샴푸", "린스", "오일");
     }
 
     @Test
