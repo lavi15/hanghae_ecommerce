@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <appender name="ASYNC_AWS_LOGS" class="ca.pjer.logback.AwsLogsAppender">
+        <awsAccessKeyId>${AWS_ACCESS_KEY_ID}</awsAccessKeyId>
+        <awsSecretKey>${AWS_SECRET_ACCESS_KEY}</awsSecretKey>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
         </filter>
