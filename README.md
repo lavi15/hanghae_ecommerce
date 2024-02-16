@@ -12,11 +12,6 @@
 - local
 - prod
 
-### Github Action 분리
-- ```pr-ci.yml``` : develop 브랜치로 pr이 들어온 경우 실행되는 파일로 테스트/빌드를 진행합니다. (test는 test-container를 사용)
-- ```dev-cd.yml``` : develop 브랜치로 push가 일어나는 경우 테스트/빌드 및 AWS ECR로 이미지를 푸시하고 ECS 배포까지 진행하게 됩니다.
-- ```prod-cd.yml``` : 
-
 ## Chapter 2. TDD 서버 구축
 ### Layered Architecture
 ```
