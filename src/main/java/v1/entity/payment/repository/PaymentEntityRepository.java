@@ -6,5 +6,5 @@ import v1.entity.payment.PaymentEntity;
 import v1.entity.product.ProductEntity;
 
 @Repository
-public interface PaymentEntityRepository extends JpaRepository<PaymentEntity, Long>{
+    public interface PaymentEntityRepository extends JpaRepository<PaymentEntity, Long>{
 }
